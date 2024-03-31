@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "directories",
+  "info": {
+    "singularName": "directory",
+    "pluralName": "directories",
+    "displayName": "Directory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "children": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::directory.directory",
+      "mappedBy": "parent"
+    },
+    "parent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::directory.directory",
+      "inversedBy": "children"
+    },
+    "link": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "directory",
+        "link"
+      ]
+    }
+  }
+}

@@ -1,10 +1,10 @@
-export type File = {
-  type: 'file'
+export type Link = {
+  type: 'link'
   name: string
 }
 
 export type Folder = {
-  type: 'folder';
+  type: 'directory';
   name: string;
-  children: Array<File | Folder>
+  children: Array<Link | Folder>
 }

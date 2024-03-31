@@ -9,7 +9,7 @@ export const getAllFilesAndFolders = (folder: Folder, path = "") => {
   folder.children.forEach((child) => {
     // Ensure the path is absolute
     const childPath = `/${path}/${child.name}`.replace(/\/+/g, "/");
-    if (child.type === "file") {
+    if (child.type === "link") {
       routes.push({ path: childPath, element: <FileComponent {...child} /> });
     } else {
       routes.push({

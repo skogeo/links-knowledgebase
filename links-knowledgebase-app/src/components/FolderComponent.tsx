@@ -18,7 +18,7 @@ export const FolderComponent = ({ name, children, path }: Props) => {
       <Grid>
         {children.map((child) => (
           <Grid.Col span={3} key={child.name}>
-            {child.type === "folder" ? (
+            {child.type === "directory" ? (
               <Card
                 onClick={() => navigate(`${path}/${child.name}`)}
                 h={100}
