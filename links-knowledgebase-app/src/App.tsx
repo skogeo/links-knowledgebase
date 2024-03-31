@@ -1,16 +1,16 @@
 // App.js
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// App.js
-import React from "react";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import 'normalize.css'
+import '@mantine/core/styles.css';
+import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import { FolderComponent } from "./components/FolderComponent";
 import { FileComponent } from "./components/FileComponent";
-import { Breadcrumbs } from "./components/Breadcrumbs";
 import { AppShell } from "@mantine/core";
+import { MainLayout } from "./layouts/MainLayout";
+import { Folder } from './types/folder';
 
-const folderStructure = {
+const folderStructure: Folder = {
   name: "Root",
+  type: 'folder',
   children: [
     {
       type: "folder",
@@ -37,8 +37,8 @@ const folderStructure = {
 };
 
 // Helper function to flatten the folder structure and generate routes
-function getAllFilesAndFolders(folder, path = "") {
-  let routes = [];
+function getAllFilesAndFolders(folder: Folder, path = "") {
+  let routes: RouteObject[] = [];
   folder.children.forEach((child) => {
     // Ensure the path is absolute
     const childPath = `/${path}/${child.name}`.replace(/\/+/g, "/");
@@ -60,12 +60,7 @@ function getAllFilesAndFolders(folder, path = "") {
 const routes = [
   {
     path: '/',
-    element: (
-      <AppShell>
-        <Breadcrumbs />
-        <Outlet />
-      </AppShell>
-    ),
+    element: <MainLayout />,
     children: [
       {
         path: "",

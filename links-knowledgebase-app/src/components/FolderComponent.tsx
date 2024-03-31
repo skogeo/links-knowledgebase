@@ -1,11 +1,11 @@
 // FolderComponent.js
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import React from 'react';
-import { Link } from 'react-router-dom';
-import {FileComponent} from './FileComponent';
+import { Link } from "react-router-dom";
+import { FileComponent } from "./FileComponent";
+import { Folder } from "../types/folder";
 
-export const FolderComponent = ({ name, children, path }) => {
+type Props = Folder & { path: string }
+
+export const FolderComponent = ({ name, children, path }: Props) => {
   return (
     <div className="folder-card">
       <div className="folder-header">
@@ -15,7 +15,7 @@ export const FolderComponent = ({ name, children, path }) => {
       <div className="folder-contents">
         {children.map((child, index) => (
           <div key={index}>
-            {child.type === 'folder' ? (
+            {child.type === "folder" ? (
               <Link to={`${path}/${child.name}`} className="folder-link">
                 {child.name}
               </Link>

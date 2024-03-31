@@ -1,5 +1,7 @@
 import { Breadcrumbs as MantineBradcrumbs } from "@mantine/core";
+import { Folder } from "react-feather";
 import { Link, useLocation } from "react-router-dom";
+import classes from "./Breadcrumbs.module.css";
 
 const baseRoute = { title: "home", href: "/" };
 
@@ -17,7 +19,8 @@ export const Breadcrumbs = () => {
   return (
     <MantineBradcrumbs>
       {items.map((item) => (
-        <Link to={item.href} key={item.href}>
+        <Link className={classes.breadcrumb} to={item.href} key={item.href}>
+          <Folder size={18} />
           {item.title}
         </Link>
       ))}

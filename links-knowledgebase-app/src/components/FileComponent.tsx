@@ -1,10 +1,6 @@
-// FileComponent.js
+type FileComponentProps = { name: string }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import React from 'react';
-
-export const FileComponent = ({ name }) => {
+export const FileComponent = ({ name }: FileComponentProps) => {
   return (
     <div className="file-card">
       <div className="file-icon">📄</div>
