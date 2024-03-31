@@ -8,18 +8,28 @@ const baseRoute = { title: "home", href: "/" };
 export const Breadcrumbs = () => {
   const { pathname } = useLocation();
 
-  const items = [
-    baseRoute,
-    ...pathname
-      .split("/")
-      .filter(Boolean)
-      .map((path) => ({ title: path, href: path })),
-  ];
+  // Initialize the items with the base route
+  const items = pathname
+    .split("/")
+    .filter(Boolean) // Remove any empty strings from the array
+    .reduce(
+      (acc, curr, index, arr) => {
+        const href = `/${arr.slice(0, index + 1).join("/")}`; // Construct the href
+        acc.push({ title: curr, href }); // Add the current breadcrumb to the accumulator
+        return acc;
+      },
+      [baseRoute]
+    );
 
   return (
     <MantineBradcrumbs>
       {items.map((item) => (
-        <Link className={classes.breadcrumb} to={item.href} key={item.href}>
+        <Link
+          relative={"path"}
+          className={classes.breadcrumb}
+          to={item.href}
+          key={item.href}
+        >
           <Folder size={18} />
           {item.title}
         </Link>
