@@ -2,31 +2,3 @@ a {
   color: var(--mantine-primary-color-9);
   text-decoration: none; /* no underline */
 }
-
-/* styles.css */
-.file-system {
-  padding: 20px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 20px;
-}
-
-.file-card, .folder-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-}
-
-.folder-header {
-  display: flex;
-  align-items: center;
-}
-
-.file-icon, .folder-icon {
-  margin-right: 10px;
-}

@@ -1,24 +1,38 @@
 import { RouteObject } from "react-router-dom";
-import { Folder } from "../types/folder";
+import { Folder, Link } from "../types/folder";
 import { FileComponent } from "../components/FileComponent";
 import { FolderComponent } from "../components/FolderComponent";
 
 // Helper function to flatten the folder structure and generate routes
-export const getAllFilesAndFolders = (folder: Folder, path = "") => {
+export const getAllFilesAndFolders = (
+  folders: Array<Folder | Link>,
+  basePath = ""
+): RouteObject[] => {
   let routes: RouteObject[] = [];
-  folder.children.forEach((child) => {
-    // Ensure the path is absolute
-    const childPath = `/${path}/${child.name}`.replace(/\/+/g, "/");
-    if (child.type === "link") {
-      routes.push({ path: childPath, element: <FileComponent {...child} /> });
-    } else {
+
+  folders.forEach((folder) => {
+    const folderPath = `${basePath}/${folder.slug}`.replace(/\/+/g, "/");
+
+    // Generate a route for the root item itself if it's a directory
+    if (folder.type === "directory") {
       routes.push({
-        path: childPath,
-        element: <FolderComponent {...child} path={childPath} />,
+        path: folderPath,
+        element: <FolderComponent {...folder} path={folderPath} />,
       });
-      // Recursively generate routes, passing down the absolute path
-      routes = routes.concat(getAllFilesAndFolders(child, childPath));
+
+      // Recursively generate routes for its children
+      const childRoutes = folder.children
+        .map((child) => getAllFilesAndFolders([child], folderPath))
+        .flat();
+      routes = [...routes, ...childRoutes];
+    } else if (folder.type === "link") {
+      // If the top-level item is a link, generate a route for it
+      routes.push({
+        path: folderPath,
+        element: <FileComponent {...folder} />,
+      });
     }
   });
+
   return routes;
-}
+};

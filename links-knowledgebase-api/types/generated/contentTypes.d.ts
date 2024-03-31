@@ -388,6 +388,11 @@ export interface ApiDirectoryDirectory extends Schema.CollectionType {
     link: Attribute.String;
     slug: Attribute.UID<'api::directory.directory', 'name'>;
     type: Attribute.Enumeration<['directory', 'link']>;
+    users_permissions_users: Attribute.Relation<
+      'api::directory.directory',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -814,6 +819,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'plugin::users-permissions.user',
       'manyToOne',
       'plugin::users-permissions.role'
+    >;
+    directories: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::directory.directory'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
