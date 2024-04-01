@@ -1,18 +1,17 @@
 // App.js
-import "normalize.css";
-import "@mantine/core/styles.css";
-import {
-  createBrowserRouter,
-  RouteObject,
-  RouterProvider,
-} from "react-router-dom";
-import { FolderComponent } from "./components/FolderComponent";
-import { AppShell } from "@mantine/core";
-import { MainLayout } from "./layouts/MainLayout";
-import { Folder } from "./types/folder";
-import { getAllFilesAndFolders } from "./utils/getAllFilesAndFolders";
-import { fetchAllDirectories } from "./api/fetchAllDirectories";
-import { useState, useEffect } from "react";
+import 'normalize.css';
+import '@mantine/core/styles.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { FolderComponent } from './components/FolderComponent';
+import { AppShell } from '@mantine/core';
+import { MainLayout } from './layouts/MainLayout';
+import { Folder } from './types/folder';
+import { getAllFilesAndFolders } from './utils/getAllFilesAndFolders';
+import { fetchAllDirectories } from './api/fetchAllDirectories';
+import { useState, useEffect } from 'react';
+import { login } from './api/login';
+import { useQuery } from '@apollo/client';
+import { GET_DIRECTORIES } from './queries/directories';
 
 // Example of structure
 // const folderStructure: Folder = {
@@ -47,45 +46,61 @@ const App = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [router, setRouter] = useState<any>(null);
 
+  // test appolo client
+  const { data } = useQuery(GET_DIRECTORIES);
+
+  console.log(data);
+
+  const loginAndGetDirectories = async () => {
+    // Login and get JWT
+    const loginData = await login();
+    const jwt = loginData.jwt;
+
+    // for appolo instance
+    localStorage.setItem('jwtToken', jwt);
+
+    // Now use the JWT to fetch all directories
+    const directoryStructureArray = await fetchAllDirectories(jwt); // Adjust fetchAllDirectories to accept jwt
+    return directoryStructureArray;
+  };
+
   useEffect(() => {
     const setupRoutes = async () => {
       try {
-        const directoryStructureArray = await fetchAllDirectories(); // This should return an array
+        const directoryStructureArray = await loginAndGetDirectories(); // This should return an array
         const dynamicRoutes = getAllFilesAndFolders(
           directoryStructureArray,
-          ""
+          ''
         );
 
         const homeFolder: Folder = {
-          type: "directory",
-          slug: "home",
-          name: "home",
+          type: 'directory',
+          slug: 'home',
+          name: 'home',
           children: directoryStructureArray,
         };
 
-        console.log(dynamicRoutes);
-
         const routes = [
           {
-            path: "/",
+            path: '/',
             element: <MainLayout />,
             children: [
               {
-                path: "",
+                path: '',
                 element: <FolderComponent {...homeFolder} path="" />, // Adjusted for root path rendering
               },
               ...dynamicRoutes, // Spread the dynamically generated routes for files and folders
             ],
           },
           {
-            path: "*",
+            path: '*',
             element: <div>404 Not Found</div>, // Fallback for unmatched routes
           },
         ];
 
         setRouter(createBrowserRouter(routes));
       } catch (error) {
-        console.error("Failed to set up routes:", error);
+        console.error('Failed to set up routes:', error);
         // Handle error appropriately
       }
     };
