@@ -6,8 +6,8 @@ export const login = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        identifier: 'luda@strapi.io',
-        // identifier: 'katya@strapi.io',
+        // identifier: 'luda@strapi.io',
+        identifier: 'katya@strapi.io',
         password: 'admin1',
       }),
     });

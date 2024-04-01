@@ -43,8 +43,9 @@ import { GET_DIRECTORIES } from './queries/directories';
 // };
 
 const App = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [router, setRouter] = useState<any>(null);
+  const [router, setRouter] = useState<ReturnType<
+    typeof createBrowserRouter
+  > | null>(null);
 
   // test appolo client
   const { data } = useQuery(GET_DIRECTORIES);
@@ -101,7 +102,6 @@ const App = () => {
         setRouter(createBrowserRouter(routes));
       } catch (error) {
         console.error('Failed to set up routes:', error);
-        // Handle error appropriately
       }
     };
 
@@ -109,14 +109,10 @@ const App = () => {
   }, []);
 
   if (!router) {
-    return <div>Loading...</div>; // Or any other loading indicator
+    return <div>Loading...</div>;
   }
 
-  return (
-    <AppShell>
-      <RouterProvider router={router} />
-    </AppShell>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
